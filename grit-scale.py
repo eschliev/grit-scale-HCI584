@@ -28,17 +28,23 @@ def execute_questionnaire():
     #Set Score
     score = 0 
 
-    #Display statements using loop
+    #Display statements using for loop
 
     for s in grit_statements:
         #Present statement
         print(s[0])
         
-        #Request user answer
-        answer = input("a) Very much like me\nb) Mostly like me\nc) Somewhat like me\nd) Not much like me\ne) Not like me at all\n:")
+        while True: 
+            #Request user answer
+            answer = input("a) Very much like me\nb) Mostly like me\nc) Somewhat like me\nd) Not much like me\ne) Not like me at all\n:")
+            if answer.lower() not in ("a", "b", "c", "d", "e"):
+                print(answer, "is not an appropriate choice, please select from the letters below:")
+            
+            else: 
+                break
         
-        if s[1] == "P":
         #Calculate scoring for positively framed questions 
+        if s[1] == "P":
             if answer.lower() == "a":
                 score = score + 5   
             elif answer.lower() == "b":
@@ -49,11 +55,9 @@ def execute_questionnaire():
                 score = score + 2 
             elif answer.lower() == "e":
                 score = score + 1  
-            else: 
-                print("You must enter a, b, c, d or e.")
         
+        #Calculate scoring for negatively framed questions 
         if s[1] == "N":
-        #Calculate scoring for positively framed questions 
             if answer.lower() == "a":
                 score = score + 1   
             elif answer.lower() == "b":
@@ -64,10 +68,8 @@ def execute_questionnaire():
                 score = score + 4 
             elif answer.lower() == "e":
                 score = score + 5  
-            else: 
-                print("You must enter a, b, c, d or e.")
 
-    #Total Score 
+    #Calculating total Score 
     final_score = float(score / 12)
     print("You scored a", final_score)
 
