@@ -1,7 +1,9 @@
+from ctypes import alignment
 from tkinter import *
 from tkinter import messagebox as mb
 import json
- 
+
+
 #Class for GUI components
 class Assessment(object):
 
@@ -21,7 +23,10 @@ class Assessment(object):
 
         #Set statement number to 0
         self.statement_num=0
-         
+        
+        #Display title and instructions 
+        self.display_title()
+
         #Assigns statements to display_statements function to update later
         self.display_statements()
          
@@ -42,8 +47,8 @@ class Assessment(object):
          
         #Counter of score
         self.score=0
- 
-    
+        
+
     # generate score for a statement and add to self.score
     def generate_score(self, statement_num):
 
@@ -54,7 +59,7 @@ class Assessment(object):
         #Calculate scoring for positively framed questions 
         if self.framing[statement_num] == "P":
             if self.resp_selected.get() == 1:
-                self.score += 5                  # must be += not =+ !!!
+                self.score += 5
             elif self.resp_selected.get() == 2:
                 self.score += 4   
             elif self.resp_selected.get() == 3:
@@ -64,9 +69,8 @@ class Assessment(object):
             elif self.resp_selected.get() == 5:
                 self.score += 1 
 
-        #Calculate scoring for positively framed questions 
-        #if self.framing[statement_num] == "N":
-        else: # no need to again test for N
+        #Calculate scoring for negatively framed questions 
+        else:
             if self.resp_selected.get() == 1:
                 self.score += 1   
             elif self.resp_selected.get() == 2:
@@ -78,24 +82,42 @@ class Assessment(object):
             elif self.resp_selected.get() == 5:
                 self.score += 5 
         
-        print(self.score)
+        #print(self.score)
 
 
     #Display result in message box 
     def display_result(self):
 
         #Calculate average score 
-        result = float(self.score / self.data_size)
-         
+        result = round(float(self.score / self.data_size), 2)
+        
+        score_1 = "You scored a", result, "which means you have extremely low grit."
+        score_2 = "You scored a", result, "which means you have low grit."
+        score_3 = "You scored a", result, "which means you have medium grit."
+        score_4 = "You scored a", result, "which means you have high grit."
+        score_5 = "You scored a", result, "which means you have extremely high grit."
+
         #Message box to display results
-        mb.showinfo("Result", result)
- 
+        if result <= 1: 
+            mb.showinfo("Result", score_1)
+        elif result <= 2:
+            mb.showinfo("Result", score_2)
+        elif result <= 3:
+            mb.showinfo("Result", score_3)
+        elif result <= 4:
+            mb.showinfo("Result", score_4)
+        elif result <= 5:
+            mb.showinfo("Result", score_5)
+    
+    
     #Show next statement
     def next_btn(self):
-         
-        # This should pop up a dialog
+        
+        enter_value = "Please select a value before hitting next."
+
+        #Message box to display error message 
         if self.resp_selected.get() == 0:
-            print("Please select a value!")
+            mb.showerror("Error", enter_value)
             return
 
         # score current statement
@@ -111,7 +133,7 @@ class Assessment(object):
             self.display_result()
              
             # destroys the GUI
-            self.gui.destroy()
+            gui.destroy()
 
         else:
             #Show the next question
@@ -123,9 +145,15 @@ class Assessment(object):
     def buttons(self):
          
         #Next button 
-        next_button = Button(self.gui, text="Next", command=self.next_btn, width=10,font=("Arial", 16, "bold"))
+        next_button = Button(self.gui, text="Next", command=self.next_btn, width=10, 
+                             bg="green", fg="white", font=("Arial", 16, "bold"))
         next_button.place(x=350, y=380)
  
+        #Quit button 
+        quit_button = Button(self.gui, text="Quit", command=gui.destroy, width=10, 
+                             bg="red", fg="white", font=("Arial", 16, "bold"))
+        quit_button.place(x=40, y=380)
+
 
     #Display responses (next to radio buttons including select/deselect behavior)
     def display_responses(self):
@@ -138,7 +166,7 @@ class Assessment(object):
         for response in self.responses[self.statement_num]:
             self.resps[val]['text']=response
             val+=1
- 
+
  
     #Display statements 
     def display_statements(self):
@@ -179,7 +207,23 @@ class Assessment(object):
          
         #Return radio buttons
         return r_list
+    
+    #This method is used to Display Title
+    def display_title(self):
+         
+        #Display title 
+        title = Label(gui, text="Grit Scale Questionnaire", fg="black", font=("Arial", 20, "bold"))
+         
+        #Place title 
+        title.place(x=0, y=2)
  
+        #Display instructions
+        title = Label(gui, text="Please respond to the following statement. Be honest - there are no right or wrong answers.", fg="black", font=("Arial", 12,))
+         
+        #Place instructions
+        title.place(x=0, y=40)
+
+
 #GUI window
 gui = Tk()
  
@@ -189,11 +233,15 @@ gui.geometry("1200x600")
 #GUI window title 
 gui.title("Grit Scale")
  
-
-
- 
 #Object of class
 assessment = Assessment("data.json", gui)
  
 #Launch GUI
 gui.mainloop()
+
+
+#Intro landing page 
+#WHAT IS GRIT?
+#• Grit is defined as perseverance and passion for long-term goals
+#• It entails working strenuously toward challenges, maintaining effort and interest over years despite failure, adversity, and plateaus in progress
+#• Grit is unrelated to talent and can be built through a growth mindset
