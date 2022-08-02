@@ -120,8 +120,7 @@ class Assessment(object):
         # Length of this values should be same with self.data_size
 
 
-        # save table of questions and this user's responses
-        # use the user's name once you have that added
+        # Table of questions and this user's responses
         with open("results.csv", "w+") as fo:
             for i in range(0, self.data_size): # Loop over all statements
                 statement = self.statements[i] # Gather statement options  
@@ -131,17 +130,23 @@ class Assessment(object):
                 response_text = possible_responses[index] # Gather this user's response in text format
                 print(f"{i},{statement},{response_text},{response_value}", file=fo) # Write individual statement results to file
             print(f"Final Grit Score = {result}, {grit_as_word}", file=fo) # Write total results to file
-            name = self.name.get()
-            print(f"Name = {name}", file=fo)
+            name = self.name.get() # Gather name info
+            print(f"Name = {name}", file=fo) # Write name to file 
 
     # Show next statement
     def next_btn(self):
 
         enter_value = "Please select a value before hitting next."
+        enter_name = "Please enter your first name."
 
-        # Message box to display error message
+        #Message box to display error message 
         if self.resp_selected.get() == 0:
             mb.showerror("Error", enter_value)
+            return
+
+        # Message box to display name error message
+        if self.name.get() == "":
+            mb.showerror("Error", enter_name)
             return
 
         # score current statement
