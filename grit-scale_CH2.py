@@ -75,19 +75,19 @@ class Assessment(object):
         else:
             if self.resp_selected.get() == 1:
                 self.score += 1
-                self.response_values.append(5)
+                self.response_values.append(1)
             elif self.resp_selected.get() == 2:
                 self.score += 2
-                self.response_values.append(4)
+                self.response_values.append(2)
             elif self.resp_selected.get() == 3:
                 self.score += 3
                 self.response_values.append(3)
             elif self.resp_selected.get() == 4:
                 self.score += 4
-                self.response_values.append(2)
+                self.response_values.append(4)
             elif self.resp_selected.get() == 5:
                 self.score += 5
-                self.response_values.append(1)
+                self.response_values.append(5)
 
         # print(self.score)
 
