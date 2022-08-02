@@ -20,7 +20,7 @@ class Assessment(object):
         self.framing = data['framing']
         self.responses = data['responses']
 
-        # have a list for the actual responses
+        # List for actual responses
         self.response_values = []
 
         # Set statement number to 0
@@ -57,7 +57,7 @@ class Assessment(object):
         if self.framing[statement_num] == "P":
             if self.resp_selected.get() == 1:
                 self.score += 5
-                self.response_values.append(5) # record the value, do this for all other cases
+                self.response_values.append(5) # Record the value
             elif self.resp_selected.get() == 2:
                 self.score += 4
                 self.response_values.append(4)
@@ -114,24 +114,25 @@ class Assessment(object):
 
         mb.showinfo("Result", score_msg)
 
-        print(self.data_size)
-        print("value count")
+        #print(self.data_size)
+        #print("value count")
+        #print(len(self.response_values))
+        # Length of this values should be same with self.data_size
 
-        print(len(self.response_values))
-
-    # length of this values should be same with self.data_size
 
         # save table of questions and this user's responses
         # use the user's name once you have that added
         with open("results.csv", "w+") as fo:
-            for i in range(0, self.data_size): #loop over all statements
-                statement = self.statements[i] #gather statement options  
-                possible_responses = self.responses[i] #gather responses options
-                response_value = self.response_values[i] # this assumes that we have 12 values in that list!
-                index = response_value - 1 # convert 1 to 5 into an index (0 to 4)  
-                response_text = possible_responses[index] 
-                print(f"{i},{statement},{response_text},{response_value}", file=fo) # format with commas and write to file
-            print(f"Final Grit Score = {result}, {grit_as_word}", file=fo)
+            for i in range(0, self.data_size): # Loop over all statements
+                statement = self.statements[i] # Gather statement options  
+                possible_responses = self.responses[i] # Gather responses options
+                response_value = self.response_values[i] # Gather this user's responses in number format, assumes 12 values in that list
+                index = response_value - 1 # Convert 1 to 5 into an index (0 to 4)  
+                response_text = possible_responses[index] # Gather this user's response in text format
+                print(f"{i},{statement},{response_text},{response_value}", file=fo) # Write individual statement results to file
+            print(f"Final Grit Score = {result}, {grit_as_word}", file=fo) # Write total results to file
+            name = self.name.get()
+            print(f"Name = {name}", file=fo)
 
     # Show next statement
     def next_btn(self):
@@ -243,6 +244,7 @@ class Assessment(object):
               font=("Arial", 12,)).place(x=40, y=120)
         name = Entry(gui)
         name.place(x=180, y=120)
+        self.name = name
 
         # Display/place instructions
         title = Label(gui,  text="Please respond to the following statement. Be honest - there are no right or wrong answers.",
